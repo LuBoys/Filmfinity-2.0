@@ -1,15 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+	{% include 'listefilm.html.twig'  %}
 
-   
-    {% include 'listefilm.html.twig' with {'films': filmsSortedByReleaseDate, 'title': 'Dernière sortie'} %}
-
-    {% include 'listefilm.html.twig' with {'films': filmsSortedByRating, 'title': 'Les plus populaires'} %}
-
-        {% include 'listefilm.html.twig' with {'title': 'Recommendation pour vous'} %}
-
-        {% include 'commentaire.html.twig' %}
-   
-
+	{% include 'commentaire.html.twig' %}
 {% endblock %}

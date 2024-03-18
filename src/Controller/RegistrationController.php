@@ -11,9 +11,12 @@ use App\Entity\Users;
 use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
-use App\Security\YourAuthenticator; // Remplacez par le chemin de votre propre authenticator
+use App\Security\LoginAuthentificatorAuthenticator;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Form\FormError;
 
-class RegistrationController extends AbstractController 
+
+class RegistrationController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
     public function register(
@@ -21,33 +24,30 @@ class RegistrationController extends AbstractController
         UserPasswordHasherInterface $passwordHasher, 
         EntityManagerInterface $entityManager,
         UserAuthenticatorInterface $userAuthenticator,
-        YourAuthenticator $authenticator // Remplacez par le service d'authentification que vous utilisez
+        LoginAuthentificatorAuthenticator $authenticator
     ): Response {
         $user = new Users();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            // hash the plain password
-            $user->setPassword(
-                $passwordHasher->hashPassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
-            
-            $entityManager->persist($user);
-            $entityManager->flush();
-            
-            // Authenticate the user
-            $userAuthenticator->authenticateUser(
-                $user, 
-                $authenticator,
-                $request // Pass the current request
-            );
+        if ($form->isSubmitted()) {
+            $plainPassword = $form->get('plainPassword')->getData();
+            if (!is_array($plainPassword) || !isset($plainPassword['first'], $plainPassword['second']) || $plainPassword['first'] !== $plainPassword['second']) {
+                $form->get('plainPassword')->addError(new FormError('Les mots de passe ne correspondent pas.'));
+            }
 
-            // Redirect to the homepage after successful registration and login
-            return $this->redirectToRoute('app_homepage');
+            if ($form->isValid()) {
+                $user->setPassword($passwordHasher->hashPassword($user, $plainPassword['first']));
+
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                // Authentifier l'utilisateur
+                $userAuthenticator->authenticateUser($user, $authenticator, $request);
+
+                // Rediriger vers la page d'accueil après inscription et connexion réussies
+                return $this->redirectToRoute('app_homepage');
+            }
         }
 
         return $this->render('registration/register.html.twig', [

@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Favoris{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('assets/css/favorites.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="container mt-4 site-content">
+    <h2 class="text-white">Mes Favoris</h2>
+    <div class="row">
+        {% for favori in favoris %}
+            <div class="col-md-3 col-sm-6 mb-4">
+                <div class="card">
+                        <img src="{{ asset('assets/img/' ~ (favori.getFilms.getImages()|first).getPhoto()) }}" alt="Image de {{ favori.getFilms.name }}" class="card-img-top">
+                    </a>    
+                    <div class="card-body">
+                        <div class="button__group">
+                            <div class="button__item">
+                                <a href="{{ path('app_film_detail', {'id': favori.getFilms.getId}) }}" class="btn btn-primary">Voir les détails</a>
+                            </div>
+                            <div class="button__item">
+                                <a href="{{ path('film_add_to_favorites', {'id': favori.getFilms.getId}) }}" class="btn btn-danger">Retirer des favoris</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p class="text-white">Vous n'avez ajouté aucun film à vos favoris.</p>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

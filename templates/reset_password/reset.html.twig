@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réinitialiser votre mot de passe{% endblock %}
+
+{% block body %}
+    <section class="login spad d-flex justify-content-center align-items-center">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="login__form">
+
+                        {{ form_start(resetForm) }}
+                            <div class="input__item">
+                                {{ form_row(resetForm.plainPassword.first, {'attr': {'class': 'form-control', 'placeholder': 'Mot de passe'}}) }}
+                            </div>
+                            <div class="input__item">
+                                {{ form_row(resetForm.plainPassword.second, {'attr': {'class': 'form-control', 'placeholder': 'Confirmer le mot de passe'}}) }}
+                            </div>
+                            <button type="submit" class="btn btn-primary">Réinitialiser le mot de passe</button>
+                        {{ form_end(resetForm) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

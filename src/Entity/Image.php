@@ -21,6 +21,9 @@ class Image
 
     #[ORM\ManyToOne(inversedBy: 'images')]
     private ?Films $imagefilm = null;
+    
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    private ?string $path = null;
 
     public function getId(): ?int
     {
@@ -66,4 +69,9 @@ class Image
     {
         return $this->titre ?: ''; // retourne le titre si défini, sinon une chaîne vide
     }
+    public function getPath(): ?string
+    {
+        return $this->path;
+    }
+    
 }

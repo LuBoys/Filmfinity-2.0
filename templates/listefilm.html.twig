@@ -1,44 +1,101 @@
-{% if films is defined and films|length > 0 %}
+{% block body %}
     <div class="container">
         <div class="row">
-            <div class="col-lg-8">
+            <div class="col-lg-12">
                 <div class="trending__product">
-                    <div class="row">
-                        <div class="col-lg-8 col-md-8 col-sm-8">
-                            <div class="section-title">
-                                <h4>{{ title|default }}</h4>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4">
-                            <div class="btn__all">
-                                <a href="#" class="primary-btn">Voir tous <span class="arrow_right"></span></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        {% for film in films %}
-                            <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div class="product__item">
-                                    <a href="{{ path('app_film_detail', {'id': film.getId()}) }}">
-                                        <div class="product__item__pic set-bg" data-setbg="{{ asset('assets/img/' ~ (film.getImages()|first).getPhoto()) }}">
-                                            <!-- Vous pouvez ajouter des éléments ici, comme commentaires, vues, etc., si vous avez ces données. -->
-                                        </div>
-                                    </a>
-
-                                    <div class="product__item__text">
-                                        <ul>
-                                            {% for genre in film.getGenres() %}
-                                                <li>{{ genre }}</li>
-                                            {% endfor %}
-                                        </ul>
-                                        <h5><a href="#">{{ film.getName() }}</a></h5>
-                                    </div>
+                    {% if popularFilms is defined and popularFilms|length > 0 %}
+                        <div class="row">
+                            <div class="col-lg-8 col-md-8 col-sm-8">
+                                <div class="section-title">
+                                    <h4>Les plus populaires</h4>
                                 </div>
                             </div>
-                        {% endfor %}
-                    </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4">
+                                <div class="btn__all">
+                                    <a href="{{ path('popular_films') }}" class="primary-btn">Voir la liste de film populaire <span class="arrow_right"></span></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            {% for film in popularFilms %}
+                                <div class="col-lg-4 col-md-6 col-sm-6">
+                                    <div class="product__item">
+                                        <a href="{{ path('app_film_detail', {'id': film.id}) }}">
+                                            <img src="{{ asset('assets/img/' ~ (film.getImages()|first).getPhoto()) }}" alt="Image de {{ film.name }}" class="product__item__pic">
+                                        </a>
+                                        <div class="product__item__text">
+                                            <ul>
+                                                {% for genre in film.genres %}
+                                                    <li>{{ genre.name }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                            <h5><a href="{{ path('app_film_detail', {'id': film.id}) }}">{{ film.name }}</a></h5>
+                                            <div class="film-rating">
+                                                {% if film.averageRating is not null %}
+                                                    <span class="badge badge-secondary">{{ film.averageRating }}/5</span>
+                                                {% else %}
+                                                    <span>Non noté</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p>Aucun film populaire à afficher.</p>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
-{% endif %}
+
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="trending__product">
+                    {% if latestFilms is defined and latestFilms|length > 0 %}
+                        <div class="row">
+                            <div class="col-lg-8 col-md-8 col-sm-8">
+                                <div class="section-title">
+                                    <h4>Dernières sorties</h4>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4">
+                                <div class="btn__all">
+                                    <a href="{{ path('latest_releases') }}" class="primary-btn">Voir toutes les dernières sorties <span class="arrow_right"></span></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            {% for film in latestFilms %}
+                                <div class="col-lg-4 col-md-6 col-sm-6">
+                                    <div class="product__item">
+                                        <a href="{{ path('app_film_detail', {'id': film.id}) }}">
+                                            <img src="{{ asset('assets/img/' ~ (film.getImages()|first).getPhoto()) }}" alt="Image de {{ film.name }}" class="product__item__pic">
+                                        </a>
+                                        <div class="product__item__text">
+                                            <ul>
+                                                {% for genre in film.genres %}
+                                                    <li style="color: white;">{{ genre.name }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                            <h5><a href="{{ path('app_film_detail', {'id': film.id}) }}" style="color: white;">{{ film.name }}</a></h5>
+                                            <!-- Ajouter la date de sortie pour les dernières sorties -->
+                                            <p style="color: white;">Date de sortie : {{ film.dateSortie|date('d/m/Y') }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p style="color: white;">Aucune dernière sortie à afficher.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

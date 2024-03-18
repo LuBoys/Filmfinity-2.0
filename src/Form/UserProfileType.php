@@ -16,13 +16,24 @@ class UserProfileType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email', EmailType::class)
-            ->add('username', TextType::class)
-            ->add('name', TextType::class, ['label' => 'Nom'])
-            ->add('nickname', TextType::class, ['label' => 'Prénom'])
-            ->add('password', PasswordType::class)
-            ->add('submit', SubmitType::class, ['label' => 'Mettre à jour'])
-        ;
+            ->add('email', EmailType::class, [
+                'label' => 'Adresse email'
+            ])
+            ->add('username', TextType::class, [
+                'label' => 'Nom d\'utilisateur'
+            ])
+            ->add('name', TextType::class, [
+                'label' => 'Nom'
+            ])
+            ->add('nickname', TextType::class, [
+                'label' => 'Prénom'
+            ])
+            ->add('password', PasswordType::class, [
+                'label' => 'Mot de passe'
+            ])
+            ->add('submit', SubmitType::class, [
+                'label' => 'Mettre à jour'
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

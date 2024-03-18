@@ -1,6 +1,5 @@
 <?php
 namespace App\Form;
-
 use App\Entity\Commentaire;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -14,17 +13,14 @@ class CommentaireType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('commentaire', TextareaType::class, [
-                // Ajoutez les options nécessaires pour le champ commentaire ici...
-            ])
+            ->add('commentaire', TextareaType::class)
             ->add('rating', IntegerType::class, [
                 'label' => 'Note (1 à 5)',
-                'required' => false, // rend le champ facultatif
                 'attr' => [
                     'min' => 1,
                     'max' => 5
                 ]
-                ]);
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

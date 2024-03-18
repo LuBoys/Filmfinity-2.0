@@ -1,6 +1,20 @@
+{% block stylesheets %}
+<style>
+    /* Menu déroulant : couleur du texte */
+    .dropdown-menu a {
+        color: black !important; /* Couleur du texte noir pour les éléments du menu */
+    }
+
+    /* Menu déroulant : couleur du texte au survol */
+    .dropdown-menu a:hover {
+        color: red !important; /* Couleur du texte rouge au survol */
+    }
+</style>
+{% endblock %}
+
 <header class="header">
     <div class="container">
-        <div class="row">
+        <div class="row align-items-center justify-content-between">
             <div class="col-lg-2">
                 <div class="header__logo">
                     <a href="{{ path('app_homepage') }}">
@@ -8,37 +22,46 @@
                     </a>
                 </div>
             </div>
-            <div class="col-lg-8">
-                <div class="header__nav">
-                    <nav class="header__menu mobile-menu">
-                        <ul>
-                            <li class="active"><a href="{{ path('app_homepage') }}">Accueil</a></li>
-                            <li>
-                                <a href="./categories.html">Categories <span class="arrow_carrot-down"></span></a>
-                                <ul class="dropdown"></ul>
-                            </li>
-                            <li><a href="./categories.html">Film</a></li>
-                            <li><a href="./anime-watching.html">Les plus populaires</a></li>
-                            <li><a href="./blog-details.html">Dernière Sortie</a></li>
-                            {% if is_granted('ROLE_ADMIN') %}
-                                <li><a href="{{ path('admin') }}">CRUD</a></li>
-                            {% endif %}
-                        </ul>
-                    </nav>
-                </div>
+            <div class="col-lg-7 header__menu-col">
+                <nav class="header__menu mobile-menu">
+                    <ul>
+                        <li class="active"><a href="{{ path('app_homepage') }}">Accueil</a></li>
+                        <li class="dropdown">
+                            <a href="#">Genres <span class="arrow_carrot-down"></span></a>
+                            <ul class="dropdown__menu">
+                                {% for genre in genres %}
+                                    <li><a href="{{ path('genre_show', {'id': genre.id}) }}">{{ genre.name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        <li><a href="{{ path('film_list_all') }}">Tous les films</a></li>
+                        <li><a href="{{ path('popular_films') }}">Les plus populaires</a></li>
+                        <li><a href="{{ path('latest_releases') }}">Dernière sortie</a></li>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li><a href="{{ path('admin') }}">CRUD</a></li>
+                        {% endif %}
+         </ul>
+                </nav>
             </div>
-            <div class="col-lg-2">
+            <div class="col-lg-3 text-right">
                 <div class="header__right">
-                    <a class="search-switch"><span class="icon_search"></span></a>
+                    <a class="search-switch" style="margin-right: 20px;"><span class="icon_search"></span></a>
                     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                        <a href="{{ path('app_profile') }}" style="color: white;">{{ app.user.name }}</a>
+                        <div class="user-area dropdown">
+                            <a href="#" class="user-area-link dropdown-toggle" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: white;">
+                                {{ app.user.username }}
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="{{ path('app_profile') }}">Profil</a>
+                                <a class="dropdown-item" href="{{ path('mes_favoris') }}">Vos favoris</a>
+                                <a class="dropdown-item" href="{{ path('app_logout') }}">Déconnexion</a>
+                            </div>
+                        </div>
                     {% else %}
-                        <a href="{{ path('app_login') }}" style="color: white;"><span class="icon_profile"></span></a>
+                        <a href="{{ path('app_login') }}" style="color: white;"><span class="icon_profile"></span> Connexion</a>
                     {% endif %}
                 </div>
             </div>
         </div>
-        <div id="mobile-menu-wrap"></div>
     </div>
-    <!--fin header-->
 </header>

@@ -10,9 +10,11 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: UsersRepository::class)]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['email'], message: 'Il existe déjà un compte avec cet email')]
 class Users implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -52,7 +54,8 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\ManyToMany(targetEntity: LikesFilms::class, inversedBy: 'users')]
     private Collection $likes;
-  /**
+ 
+    /**
      * @Assert\NotBlank(groups={"registration"})
      * @Assert\Length(min=6, max=4096, groups={"registration"})
      */
@@ -65,6 +68,8 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         $this->likes = new ArrayCollection();
     }
 
+    // Getter and setter methods
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,64 +80,45 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->email;
     }
 
-    public function setEmail(string $email): static
+    public function setEmail(string $email): self
     {
         $this->email = $email;
-
         return $this;
     }
 
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
     }
 
-    /**
-     * @see UserInterface
-     */
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
-
         return array_unique($roles);
     }
 
-    public function setRoles(array $roles): static
+    public function setRoles(array $roles): self
     {
         $this->roles = $roles;
-
         return $this;
     }
 
-    /**
-     * @see PasswordAuthenticatedUserInterface
-     */
     public function getPassword(): string
     {
         return $this->password;
     }
 
-    public function setPassword(string $password): static
+    public function setPassword(string $password): self
     {
         $this->password = $password;
-
         return $this;
     }
 
-    /**
-     * @see UserInterface
-     */
     public function eraseCredentials(): void
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        // Efface les données sensibles temporaires
+        $this->plainPassword = null;
     }
 
     public function getUsername(): ?string
@@ -140,10 +126,9 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->username;
     }
 
-    public function setUsername(string $username): static
+    public function setUsername(string $username): self
     {
         $this->username = $username;
-
         return $this;
     }
 
@@ -152,10 +137,9 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->name;
     }
 
-    public function setName(string $name): static
+    public function setName(string $name): self
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -164,10 +148,9 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->nickname;
     }
 
-    public function setNickname(string $nickname): static
+    public function setNickname(string $nickname): self
     {
         $this->nickname = $nickname;
-
         return $this;
     }
 
@@ -176,96 +159,14 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->notes;
     }
 
-    public function setNotes(?Notes $notes): static
+    public function setNotes(?Notes $notes): self
     {
         $this->notes = $notes;
-
         return $this;
     }
 
-    /**
-     * @return Collection<int, Commentaire>
-     */
-    public function getCommentaires(): Collection
-    {
-        return $this->commentaires;
-    }
+    // Méthodes pour gérer les associations (commentaires, favoris, likes)
 
-    public function addCommentaire(Commentaire $commentaire): static
-    {
-        if (!$this->commentaires->contains($commentaire)) {
-            $this->commentaires->add($commentaire);
-            $commentaire->setUsers($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCommentaire(Commentaire $commentaire): static
-    {
-        if ($this->commentaires->removeElement($commentaire)) {
-            // set the owning side to null (unless already changed)
-            if ($commentaire->getUsers() === $this) {
-                $commentaire->setUsers(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Favorie>
-     */
-    public function getFavories(): Collection
-    {
-        return $this->favories;
-    }
-
-    public function addFavory(Favorie $favory): static
-    {
-        if (!$this->favories->contains($favory)) {
-            $this->favories->add($favory);
-            $favory->setUsers($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFavory(Favorie $favory): static
-    {
-        if ($this->favories->removeElement($favory)) {
-            // set the owning side to null (unless already changed)
-            if ($favory->getUsers() === $this) {
-                $favory->setUsers(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, LikesFilms>
-     */
-    public function getLikes(): Collection
-    {
-        return $this->likes;
-    }
-
-    public function addLike(LikesFilms $like): static
-    {
-        if (!$this->likes->contains($like)) {
-            $this->likes->add($like);
-        }
-
-        return $this;
-    }
-
-    public function removeLike(LikesFilms $like): static
-    {
-        $this->likes->removeElement($like);
-
-        return $this;
-    }
     public function getPlainPassword(): ?string
     {
         return $this->plainPassword;

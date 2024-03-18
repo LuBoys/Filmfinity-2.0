@@ -7,37 +7,43 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Form\UserProfileType;
-
-
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ProfileController extends AbstractController
 {
     #[Route('/profile', name: 'app_profile')]
-    /**
- * @Route("/profile/edit", name="profile_edit")
- */
-public function edit(Request $request): Response
-{
-    $user = $this->getUser(); // Récupérer l'utilisateur actuellement connecté
+    public function edit(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            throw new AccessDeniedException('Vous devez être connecté pour accéder à cette page.');
+        }
 
-    $form = $this->createForm(UserProfileType::class, $user);
-    $form->handleRequest($request);
+        $form = $this->createForm(UserProfileType::class, $user);
+        $form->handleRequest($request);
 
-    // Dans votre méthode de contrôleur
-    if ($form->isSubmitted() && $form->isValid()) {
-    // Hasher le mot de passe
-    $hashedPassword = $passwordEncoder->encodePassword($user, $user->getPassword());
-    $user->setPassword($hashedPassword);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Supposez que vous avez un champ dans votre formulaire pour le mot de passe actuel nommé 'currentPassword'
+            $currentPassword = $form->get('currentPassword')->getData(); // Vous devrez ajouter ce champ à votre formulaire UserProfileType
 
-    // ... Sauvegardez les modifications dans la base de données
+            if (!$passwordHasher->isPasswordValid($user, $currentPassword)) {
+                $this->addFlash('error', 'Le mot de passe actuel est incorrect.');
+                return $this->render('profile/index.html.twig', [
+                    'form' => $form->createView(),
+                ]);
+            }
 
-    return $this->redirectToRoute('profile_view'); // rediriger vers la page de vue du profil
-}
+            $entityManager->persist($user);
+            $entityManager->flush();
 
+            $this->addFlash('success', 'Votre profil a été mis à jour avec succès.');
+            return $this->redirectToRoute('app_profile');
+        }
 
-    return $this->render('profile/index.html.twig', [
-        'form' => $form->createView(),
-    ]);
-}
-
+        return $this->render('profile/index.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
 }

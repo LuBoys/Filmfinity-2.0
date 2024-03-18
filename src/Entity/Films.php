@@ -402,4 +402,28 @@ public function removeImage(Image $image): static
 
     return $this;
 }
+public function getFirstImagePath(): ?string
+{
+    if ($this->images->isEmpty()) {
+        return null;
+    }
+
+    return $this->images->first()->getPath();
+}
+  /**
+     * @ORM\OneToMany(targetEntity=Commentaire::class, mappedBy="film")
+     */
+
+    public function getAverageRating(): ?float
+    {
+        if (count($this->commentaires) === 0) {
+            return null;
+        }
+        
+        $sum = array_reduce($this->commentaires->toArray(), function ($total, $commentaire) {
+            return $total + $commentaire->getRating();
+        }, 0);
+        
+        return $sum / count($this->commentaires);
+    }
 }

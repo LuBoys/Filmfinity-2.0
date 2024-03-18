@@ -88,6 +88,15 @@
             "ref": "18ce21f16066cccfa0803c9e846a2e4f4bec92ab"
         }
     },
+    "karser/karser-recaptcha3-bundle": {
+        "version": "0.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "0.1",
+            "ref": "c51ce07c10331d506762efe25b6f5843c1a5ea17"
+        }
+    },
     "nelmio/cors-bundle": {
         "version": "2.3",
         "recipe": {
@@ -329,6 +338,18 @@
             "config/routes/web_profiler.yaml"
         ]
     },
+    "symfonycasts/reset-password-bundle": {
+        "version": "1.21",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "1.0",
+            "ref": "97c1627c0384534997ae1047b93be517ca16de43"
+        },
+        "files": [
+            "config/packages/reset_password.yaml"
+        ]
+    },
     "twig/extra-bundle": {
         "version": "v3.7.1"
     },
@@ -340,5 +361,17 @@
             "version": "1.13",
             "ref": "1b3064c2f6b255c2bc2f56461aaeb76b11e07e36"
         }
+    },
+    "victor-prdh/recaptcha-bundle": {
+        "version": "1.8",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "1.5",
+            "ref": "f604d862b3ce4434d131a0e9b3a2eb7bb1784aff"
+        },
+        "files": [
+            "config/packages/recaptcha.yaml"
+        ]
     }
 }

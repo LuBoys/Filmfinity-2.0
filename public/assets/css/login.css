@@ -1,0 +1,156 @@
+.login {
+    padding-top: 130px;
+    padding-bottom: 150px;
+    display: flex;
+    justify-content: center; /* Centrer horizontalement */
+    align-items: center; /* Centrer verticalement */
+}
+
+.login__form {
+    position: relative;
+    padding-left: 50px; /* Réduit pour aligner le formulaire avec le reste de la page */
+    width: 400px; /* Largeur du formulaire */
+}
+
+.login__form:after {
+    /* Cette partie est supprimée car elle n'est pas nécessaire */
+    /* ... */
+}
+
+.login__form h3 {
+    color: #ffffff;
+    font-weight: 700;
+    font-family: "Oswald", sans-serif;
+    margin-bottom: 30px;
+}
+
+.login__form form .input__item {
+    position: relative;
+    width: 100%; /* Ajusté pour occuper toute la largeur */
+    margin-bottom: 20px;
+}
+
+.login__form form .input__item:before {
+    /* Cette partie est supprimée car elle n'est pas nécessaire */
+    /* ... */
+}
+
+.login__form form .input__item input {
+    height: 50px;
+    width: 100%;
+    max-width: 400px; /* Largeur maximale des champs de saisie */
+    font-size: 15px;
+    color: #b7b7b7;
+    background: #ffffff;
+    border: none;
+    padding-left: 20px; /* Ajusté pour aligner avec le reste du formulaire */
+}
+
+
+/* Le reste du CSS reste inchangé */
+
+.login__register {
+    padding-left: 30px;
+}
+
+.login__register h3 {
+    color: #ffffff;
+    font-weight: 700;
+    font-family: "Oswald", sans-serif;
+    margin-bottom: 30px;
+}
+
+.login__register .primary-btn {
+    background: #e53637;
+    padding: 12px 42px;
+}
+
+.login__social {
+    padding-top: 52px;
+}
+
+.login__social__links {
+    text-align: center;
+}
+
+.login__social__links span {
+    color: #ffffff;
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+}
+
+.login__social__links ul li {
+    list-style: none;
+    margin-bottom: 15px;
+}
+
+.login__social__links ul li:last-child {
+    margin-bottom: 0;
+}
+
+.login__social__links ul li a {
+    color: #ffffff;
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    width: 460px;
+    padding: 14px 0;
+    position: relative;
+    margin: 0 auto;
+}
+
+.login__social__links ul li a.facebook {
+    background: #4267b2;
+}
+
+.login__social__links ul li a.google {
+    background: #ff4343;
+}
+
+.login__social__links ul li a.twitter {
+    background: #1da1f2;
+}
+
+.login__social__links ul li a i {
+    font-size: 20px;
+    position: absolute;
+    left: 32px;
+    top: 14px;
+}
+
+.form-label, .form-control {
+    color: rgb(0, 0, 0);
+}
+/* Nouveau CSS pour la page de profil */
+
+/* Bouton du formulaire de connexion */
+.login__form form .input__item .btn {
+    background-color: red; /* Bouton rouge */
+    color: white; /* Texte blanc */
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+/* Effet au survol */
+.login__form form .input__item .btn:hover {
+    background-color: black; /* Bouton noir au survol */
+    color: white; /* Texte blanc */
+}
+
+.button__group {
+    display: flex;
+    justify-content: space-between;
+}
+
+.button__item {
+    flex: 1;
+    margin-right: 50px; /* Espace entre les boutons */
+    text-align: right; /* Alignement du contenu à droite */
+}
+

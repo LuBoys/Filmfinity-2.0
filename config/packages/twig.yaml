@@ -1,5 +1,8 @@
 twig:
     default_path: '%kernel.project_dir%/templates'
+    globals:
+        genres: '@App\Repository\GenreRepository' # Assurez-vous que cette ligne est correcte
+    # ... autres configurations de Twig ...
 
 when@test:
     twig:

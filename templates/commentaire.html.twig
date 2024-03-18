@@ -1,16 +1,25 @@
-
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
-    <h2>Derniers commentaires</h2>
+    <h2 style="color: white; text-align: center;">Derniers commentaires</h2> <!-- Titre centré et en blanc -->
+    
     <div class="latest-comments">
         {% for commentaire in commentaires %}
             <div class="comment">
-                <p>{{ commentaire.commentaire }}</p>
-                <p>Film : <a href="{{ path('app_film_detail', {'id': commentaire.films.id}) }}">{{ commentaire.films.name }}</a></p>
-                <p>Posté par : {{ commentaire.users.username }} le {{ commentaire.getDateCommentaire|date('d/m/Y H:i') }}</p>            </div>
+                <div>
+                    <p style="color: white; float: left;">{{ commentaire.users.username }}</p> <!-- Nom de la personne en blanc -->
+                    <p style="color: white; float: right;">{{ commentaire.getDateCommentaire|date('d/m/Y H:i') }}</p> <!-- Date à droite en blanc -->
+                </div>
+                <div style="clear: both;"></div> <!-- Ajout d'un clear pour gérer la disposition -->
+                <p style="color: white;">Film : <a href="{{ path('app_film_detail', {'id': commentaire.films.id}) }}">{{ commentaire.films.name }}</a></p> <!-- Film en blanc -->
+                <p style="color: white;">{{ commentaire.commentaire }}</p> <!-- Commentaire de la personne en blanc -->
+                
+                {% if commentaire.rating is not null %}
+                    <p style="color: white;">Note : {{ commentaire.rating }}/5</p> <!-- Afficher la note si elle existe -->
+                {% endif %}
+            </div>
         {% else %}
-            <p>Aucun commentaire récent.</p>
+            <p style="color: white;">Aucun commentaire récent.</p>
         {% endfor %}
     </div>
 {% endblock %}

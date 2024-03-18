@@ -1,72 +1,60 @@
-{% extends 'empty.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block body %}
-		 <!-- Page Preloder -->
-    <div id="preloder">
-        <div class="loader"></div>
-    </div>
+	<!-- Page Preloder -->
+	<div id="preloder">
+		<div class="loader"></div>
+	</div>
 
+	<!-- Normal Breadcrumb Begin -->
+	<section class="normal-breadcrumb set-bg" data-setbg="img/normal-breadcrumb.jpg">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 text-center">
+						</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- Normal Breadcrumb End -->
 
-    <!-- Normal Breadcrumb Begin -->
-    <section class="normal-breadcrumb set-bg" data-setbg="img/normal-breadcrumb.jpg">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <div class="normal__breadcrumb__text">
-                        <h2>Connexion à Filmfinity</h2>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Normal Breadcrumb End -->
+	<!-- Login Section Begin -->
+	<section class="login spad">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="login__form">
+						<h3>Connexion</h3>
 
-    <!-- ... (Reste du code du début de votre nouvelle page) ... -->
+						<!-- Affichage des erreurs de connexion -->
+						{% if error %}
+							<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+						{% endif %}
 
-<!-- Login Section Begin -->
-<section class="login spad">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="login__form">
-                    <h3>Connexion</h3>
-                    
-                    <!-- Le formulaire de votre ancienne page commence ici -->
-                    <form method="post">
-                        {% if error %}
-                            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                        {% endif %}
-                        <div class="input__item">
-                            <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus placeholder="Email address">
-                            <span class="icon_mail"></span>
-                        </div>
-                        <div class="input__item">
-                            <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required placeholder="Password">
-                            <span class="icon_lock"></span>
-                        </div>
-                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-                        <button type="submit" class="site-btn">Se connecter</button>
-                    </form>
-                    <a href="#" class="forget_pass">Mot de passe oublié ?</a>
-                    <!-- Fin du formulaire -->
-
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="login__register">
-                    <h3>Vous n'avez pas de compte?</h3>
-                    <a href="{{ path('app_register') }}" class="primary-btn">Inscription</a>
-                </div>
-            </div>
-        </div>
-
-      <!-- Search model Begin -->
-      <div class="search-model">
-        <div class="h-100 d-flex align-items-center justify-content-center">
-            <div class="search-close-switch"><i class="icon_close"></i></div>
-            <form class="search-model-form">
-                <input type="text" id="search-input" placeholder="Search here.....">
-            </form>
-        </div>
-    </div>
-		{% endblock %}
+						<!-- Début du formulaire -->
+						<form method="post">
+							<div class="input__item">
+								<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus placeholder="Adresse email">
+								<span class="icon_mail"></span>
+							</div>
+							<div class="input__item">
+								<input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required placeholder="Mot de passe">
+								<span class="icon_lock"></span>
+							</div>
+							<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+							<button type="submit" class="btn btn-primary">Se connecter</button> <a style="" href="{{ path('app_forgot_password_request') }}">Mot de passe oublié ?</a>
+						</form>
+						<!-- Fin du formulaire -->
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="login__register">
+						<h3>Vous n'avez pas de compte ?</h3>
+						<a href="{{ path('app_register') }}" class="btn btn-primary">Inscription</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- Login Section End -->
+{% endblock %}

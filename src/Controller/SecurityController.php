@@ -12,21 +12,28 @@ class SecurityController extends AbstractController
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        // if ($this->getUser()) {
-        //     return $this->redirectToRoute('target_path');
-        // }
+        // Redirigez l'utilisateur si déjà connecté
+        if ($this->getUser()) {
+            return $this->redirectToRoute('app_homepage'); // Modifier la route selon votre cas
+        }
 
-        // get the login error if there is one
+        // Récupérez l'erreur de connexion s'il y en a une
         $error = $authenticationUtils->getLastAuthenticationError();
-        // last username entered by the user
+
+        // Récupérez le dernier nom d'utilisateur saisi par l'utilisateur
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+        // Affichez le template de connexion et passez les variables nécessaires
+        return $this->render('security/login.html.twig', [
+            'last_username' => $lastUsername, 
+            'error' => $error
+        ]);
     }
 
     #[Route(path: '/logout', name: 'app_logout')]
     public function logout(): void
     {
+        // Vous n'avez rien à faire ici, Symfony gérera la déconnexion pour vous
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 }

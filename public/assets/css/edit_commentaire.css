@@ -1,0 +1,36 @@
+.custom-container {
+    background-color: transparent;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 50px;
+}
+
+.custom-heading {
+    color: white;
+    text-align: center;
+}
+
+.custom-form-group {
+    margin-bottom: 20px;
+}
+
+.custom-form-control {
+    background-color: transparent;
+    color: white;
+    border-color: white; /* Mettez la couleur de la bordure de votre choix */
+}
+
+.custom-rating {
+    color: white;
+}
+
+.custom-btn {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+}
+
+.custom-btn:hover {
+    background-color: black; /* Au survol, le bouton devient noir */
+    border-color: black; /* Mettez la couleur de la bordure de votre choix */
+}

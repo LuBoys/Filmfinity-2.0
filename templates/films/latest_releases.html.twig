@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('build/fontawesome.css') }}">
+    {{ parent() }}
+{% endblock %}
+{% block title %}{% endblock %}
+
+{% block body %}
+	<div class="container mt-5">
+		<div class="sorting mb-4">
+			<form action="{{ path('latest_releases') }}" method="get">
+				<div class="row">
+					<div class="col-md-12 d-flex justify-content-between">
+						<label for="order" class="form-label"></label>
+						<select id="order" name="order" class="form-select" onchange="this.form.submit()">
+							<option value="alphabetical" {% if current_order == 'alphabetical' %} selected {% endif %}>Ordre Alphabétique</option>
+							<option value="duration" {% if current_order == 'duration' %} selected {% endif %}>Durée</option>
+							<option value="latest" {% if current_order == 'latest' %} selected {% endif %}>Dernière Sortie</option>
+						</select>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="row">
+			{% for film in latestFilms %}
+				<div class="col-md-4">
+					<div class="card mb-4">
+						{% set firstImage = film.getImages()|first %}
+						<img src="{{ firstImage ? asset('assets/img/' ~ firstImage.getPhoto()) : asset('assets/img/default/image.jpg') }}" class="d-block w-100 film-image" alt="Image de {{ film.name }}">
+						<div class="card-body">
+							<h5 class="card-title film-title">{{ film.name }}</h5>
+							<p class="release-date">Sortie le :
+								{{ film.dateSortie ? film.dateSortie|date('d/m/Y') : 'Date inconnue' }}</p>
+							<p class="film-description">{{ film.description|striptags|slice(0, 200) ~ '...' }}</p>
+						    {% if app.user %}
+                                {% set isFavorite = film.favories|filter(favori => favori.getUsers == app.user)|length > 0 %}
+                                <a href="{{ path('film_add_to_favorites', {'id': film.id}) }}" class="btn btn-{{ isFavorite ? 'secondary' : 'primary' }}">
+                                    {{ isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris' }}
+                                </a>
+                            {% endif %}
+                        </div>
+                        <div class="card-footer">
+                            <a href="{{ path('app_film_detail', {'id': film.id}) }}" class="btn btn-primary">Voir plus</a>
+                        </div>
+                    </div>
+                </div>
+			{% else %}
+				<p>Aucun film n'a été trouvé.</p>
+			{% endfor %}
+		</div>
+	</div>
+{% endblock %}
