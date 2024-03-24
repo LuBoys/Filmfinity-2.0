@@ -11,7 +11,6 @@
                     <label for="order" class="form-label"></label>
                     <select id="order" name="order" class="form-select" onchange="this.form.submit()">
                         <option value="alphabetical" {% if current_order == 'alphabetical' %} selected {% endif %}>Ordre Alphabétique</option>
-                        <option value="duration" {% if current_order == 'duration' %} selected {% endif %}>Durée</option>
                         <option value="latest" {% if current_order == 'latest' %} selected {% endif %}>Dernière Sortie</option>
                         <option value="popular" {% if current_order == 'popular' %} selected {% endif %}>Plus Populaires</option>
                     </select>
@@ -19,21 +18,24 @@
             </div>
         </form>
     </div>
-    <div class="row">
+    <div class="row justify-content-center">
         {% for film in films %}
-            <div class="col-md-4">
-                <div class="card mb-4">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow">
                     {% set firstImage = film.getImages()|first %}
-                    <img src="{{ firstImage ? asset('assets/img/' ~ firstImage.getPhoto()) : asset('assets/img/default/image.jpg') }}" class="card-img-top" alt="Image de {{ film.name }}">
+                    <a href="{{ path('app_film_detail', {'id': film.id}) }}">
+                        <img src="{{ firstImage ? asset('assets/img/' ~ firstImage.getPhoto()) : asset('assets/img/default/image.jpg') }}" alt="Image de {{ film.name }}" class="card-img-top film-image">
+                    </a>
                     <div class="card-body">
-                        <h5 class="card-title film-title">{{ film.name }}</h5>
-                        <p class="card-text film-description">{{ film.getDescription()|striptags|slice(0, 200) ~ '...' }}</p>
-                        {% if app.user %}
-                            {% set isFavorite = film.favories|filter(favori => favori.getUsers == app.user)|length > 0 %}
-                            <a href="{{ path('film_add_to_favorites', {'id': film.id}) }}" class="btn btn-{{ isFavorite ? 'secondary' : 'primary' }}">
-                                {{ isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris' }}
-                            </a>
+                        <h5 class="card-title film-title"><span class="film-name">{{ film.name }}</span>
+                        <!-- Affichage conditionnel de la note moyenne ou de la date de sortie -->
+                        {% if current_order == 'popular' %}
+                            <br><small class="text-muted">Note : {{ film.getAverageRating ? film.getAverageRating ~ '/5' : 'Non noté' }}</small>
+                        {% elseif current_order == 'latest' %}
+                            <br><small class="text-muted">Sortie : {{ film.dateSortie|date('d/m/Y') }}</small>
                         {% endif %}
+                        </h5>
+                        <p class="card-text film-description">{{ film.getDescription()|striptags|slice(0, 200) ~ '...' }}</p>
                     </div>
                     <div class="card-footer">
                         <a href="{{ path('app_film_detail', {'id': film.id}) }}" class="btn btn-primary">Voir plus</a>

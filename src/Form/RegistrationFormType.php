@@ -30,21 +30,12 @@ class RegistrationFormType extends AbstractType
                 'second_options' => ['label' => 'Confirmer le mot de passe'],
                 'invalid_message' => 'Les mots de passe ne correspondent pas.',
             ])
-            ->add('recaptcha', ReCaptchaType::class, ['type' => 'invisible'])
-            ->add('agreeTerms', CheckboxType::class, [
-                'mapped' => false,
-                'constraints' => new Assert\IsTrue([
-                    'message' => 'Vous devez accepter les conditions d\'utilisation.',
-                ]),
-                'label' => 'J\'accepte les conditions',
-            ]);
+            ->add('recaptcha', ReCaptchaType::class, ['type' => 'invisible']);
     }
-public function configureOptions(OptionsResolver $resolver)
-{
-    $resolver->setDefaults([
-        'data_class' => Users::class,
-        // Ici, nous désactivons la validation par défaut pour gérer les messages d'erreur manuellement dans le contrôleur
-        'validation_groups' => false,
-    ]);
-}
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'data_class' => Users::class,
+        ]);
+    }
 }

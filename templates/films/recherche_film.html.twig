@@ -1,9 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-
-	{% if films is defined and films|length > 0 %}
-		<div class="container">
+	<div class="container">
+		{% if films is defined and films|length > 0 %}
 			<div class="row">
 				<div class="col-lg-8">
 					<div class="trending__product">
@@ -14,9 +13,7 @@
 								</div>
 							</div>
 							<div class="col-lg-4 col-md-4 col-sm-4">
-								<div
-									class="btn__all"><!-- Adjust the href if needed -->
-								</div>
+								<div class="btn__all"><!-- Adjust the href if needed --></div>
 							</div>
 						</div>
 						<div class="row">
@@ -24,15 +21,12 @@
 								<div class="col-lg-4 col-md-6 col-sm-6">
 									<div class="product__item">
 										<a href="{{ path('app_film_detail', {'id': film.id}) }}">
-											<div
-												class="product__item__pic set-bg" data-setbg="{{ asset('assets/img/' ~ film.images.0.getPhoto()) }}"><!-- Additional elements can be added here -->
-											</div>
+											<img src="{{ asset('assets/img/' ~ (film.getImages()|first).getPhoto()) }}" alt="Image de {{ film.name }}" class="product__item__pic">
 										</a>
 										<div class="product__item__text">
 											<ul>
 												{% for genre in film.genres %}
 													<li>{{ genre.name }}</li>
-													<!-- Adjust if the genre structure is different -->
 												{% endfor %}
 											</ul>
 											<h5>
@@ -46,7 +40,18 @@
 					</div>
 				</div>
 			</div>
-		</div>
-	{% endif %}
-
+		{% else %}
+			<div class="row justify-content-center">
+				<div class="col-lg-12 text-center">
+					<div class="alert alert-secondary mt-5" role="alert">
+						<h4 class="alert-heading">Oh non !</h4>
+						<p>Nous n'avons pas trouvé de films correspondant à votre recherche.</p>
+						<hr>
+						<p class="mb-0">Essayez avec d'autres mots-clés ou
+							<a href="{{ path('film_list_all') }}" class="alert-link">parcourez notre collection</a>.</p>
+					</div>
+				</div>
+			</div>
+		{% endif %}
+	</div>
 {% endblock %}

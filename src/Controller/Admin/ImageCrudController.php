@@ -21,13 +21,17 @@ class ImageCrudController extends AbstractCrudController
     {
         return [
             AssociationField::new('imagefilm'),
-            TextField::new('Titre', 'Type de l\'image'),
+            TextField::new('titre', 'Type de l\'image'),
             ImageField::new('photo', 'Votre image')
-                    ->setBasePath('assets/img/')
-                    ->setUploadDir('public/assets/img')
+                    ->setBasePath('assets/img/') // Correspond au chemin public de votre image
+                    ->setUploadDir('public/assets/img') // Correspond au chemin de téléchargement
                     ->setUploadedFileNamePattern('[randomhash].[extension]')
-                    ->setRequired(true),
+                    ->setRequired(false),
         ];
     }
+    
+    
+    
+
     
 }

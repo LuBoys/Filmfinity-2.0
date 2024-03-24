@@ -1,73 +1,73 @@
-	{% extends 'base.html.twig' %}
+{% extends 'base.html.twig' %}
 
-	{% block title %}Inscription{% endblock %}
+{% block title %}Inscription{% endblock %}
 
-	{% block body %}
-	<section class="signup spad">
-		<div class="container">
-			<div class="row justify-content-center">
-				<div class="col-lg-6">
-					<div class="login__form">
-						<h3 style="color: white; margin-bottom: 20px;">Inscription</h3>
+{% block body %}
+<div class="signup">
+    <div class="login__form">
+        <h3>Inscription</h3>
 
-										{{ form_start(registrationForm) }}
-
-
-						<div class="form-group">
-							{{ form_label(registrationForm.email) }}
-							{{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Email'}}) }}
-							{{ form_errors(registrationForm.email) }}
-						</div>
-
-						<div class="form-group">
-							{{ form_label(registrationForm.username) }}
-							{{ form_widget(registrationForm.username, {'attr': {'class': 'form-control', 'placeholder': 'Nom d\'utilisateur'}}) }}
-							{{ form_errors(registrationForm.username) }}
-						</div>
-
-						<div class="form-group">
-							{{ form_label(registrationForm.name) }}
-							{{ form_widget(registrationForm.name, {'attr': {'class': 'form-control', 'placeholder': 'Nom'}}) }}
-							{{ form_errors(registrationForm.name) }}
-						</div>
-
-						<div class="form-group">
-							{{ form_label(registrationForm.nickname) }}
-							{{ form_widget(registrationForm.nickname, {'attr': {'class': 'form-control', 'placeholder': 'Prénom'}}) }}
-							{{ form_errors(registrationForm.nickname) }}
-						</div>
-
-						<div class="form-group">
-							{{ form_label(registrationForm.plainPassword.first) }}
-							{{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'form-control', 'placeholder': 'Mot de passe'}}) }}
-							{{ form_errors(registrationForm.plainPassword.first) }}
-							<small class="form-text text-muted">
-								Le mot de passe doit contenir une majuscule, une minuscule, un chiffre et un caractère spécial.
-							</small>
-						</div>
-
-						<div class="form-group">
-							{{ form_label(registrationForm.plainPassword.second) }}
-							{{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'form-control', 'placeholder': 'Confirmer le mot de passe'}}) }}
-							{{ form_errors(registrationForm.plainPassword.second) }}
-						</div>
-
-						<div class="form-group">
-							{{ form_widget(registrationForm.agreeTerms) }}
-							{{ form_label(registrationForm.agreeTerms) }}
-						</div>
-
-						<div class="form-group">
-							{{ form_widget(registrationForm.recaptcha) }}
-							{{ form_errors(registrationForm.recaptcha) }}
-						</div>
-
-						<button type="submit" class="btn btn-primary">S'inscrire</button>
-
-						{{ form_end(registrationForm) }}
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-	{% endblock %}
+          {{ form_start(registrationForm, {'attr': {'class': 'form'}}) }}
+            <div class="input__item">
+                {{ form_label(registrationForm.email) }}
+                {{ form_widget(registrationForm.email, {
+                    attr: {placeholder: 'Email', class: 'input'}
+                }) }}
+                {% if registrationForm.vars.submitted %}
+                    {% if not registrationForm.email.vars.errors %}
+                        <div class="alert alert-danger">
+                            Cet email est déjà utilisé ou invalide.
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+            <div class="input__item">
+                {{ form_label(registrationForm.username) }}
+                {{ form_widget(registrationForm.username, {
+                    attr: {placeholder: 'Nom d\'utilisateur', class: 'input'}
+                }) }}
+            </div>
+            <div class="input__item">
+                {{ form_label(registrationForm.name) }}
+                {{ form_widget(registrationForm.name, {
+                    attr: {placeholder: 'Nom', class: 'input'}
+                }) }}
+            </div>
+            <div class="input__item">
+                {{ form_label(registrationForm.nickname) }}
+                {{ form_widget(registrationForm.nickname, {
+                    attr: {placeholder: 'Prénom', class: 'input'}
+                }) }}
+            </div>
+            <div class="input__item">
+                {{ form_label(registrationForm.plainPassword.first) }}
+                {{ form_widget(registrationForm.plainPassword.first, {
+                    attr: {placeholder: 'Mot de passe', class: 'input'}
+                }) }}
+                {% if registrationForm.vars.submitted and registrationForm.plainPassword.first.vars.errors %}
+                    <div class="alert alert-danger">
+                        {{ form_errors(registrationForm.plainPassword.first) }}
+                    </div>
+                {% endif %}
+                <small class="password-advice text-white">Utiliser au moins une majuscule, minuscule, chiffre et caractère spécial.</small>
+            </div>
+            <div class="input__item">
+                {{ form_label(registrationForm.plainPassword.second) }}
+                {{ form_widget(registrationForm.plainPassword.second, {
+                    attr: {placeholder: 'Confirmer le mot de passe', class: 'input'}
+                }) }}
+                {% if registrationForm.vars.submitted and not registrationForm.plainPassword.second.vars.errors %}
+                    {% if registrationForm.plainPassword.first.vars.value != registrationForm.plainPassword.second.vars.value %}
+                        <div class="alert alert-danger">
+                            Les mots de passe ne correspondent pas.
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+            <div class="input__item">
+                <button type="submit" class="btn">S'inscrire</button>
+            </div>
+        {{ form_end(registrationForm) }}
+    </div>
+</div>
+{% endblock %}

@@ -25,7 +25,7 @@
                                         </a>
                                         <div class="product__item__text">
                                             <ul>
-                                                {% for genre in film.genres %}
+                                                {% for genre in film.genres|slice(0, 3) %}
                                                     <li>{{ genre.name }}</li>
                                                 {% endfor %}
                                             </ul>
@@ -78,7 +78,7 @@
                                         </a>
                                         <div class="product__item__text">
                                             <ul>
-                                                {% for genre in film.genres %}
+                                                {% for genre in film.genres|slice(0, 3) %}
                                                     <li style="color: white;">{{ genre.name }}</li>
                                                 {% endfor %}
                                             </ul>
@@ -97,5 +97,4 @@
             </div>
         </div>
     </div>
-
-{% endblock %}
+    			{% endblock %}

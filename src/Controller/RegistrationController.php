@@ -2,54 +2,52 @@
 
 namespace App\Controller;
 
+use App\Entity\Users;
+use App\Form\RegistrationFormType;
+use App\Security\LoginAuthentificatorAuthenticator;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use App\Entity\Users;
-use App\Form\RegistrationFormType;
-use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
-use App\Security\LoginAuthentificatorAuthenticator;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Form\FormError;
-
 
 class RegistrationController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
-    public function register(
-        Request $request, 
-        UserPasswordHasherInterface $passwordHasher, 
-        EntityManagerInterface $entityManager,
-        UserAuthenticatorInterface $userAuthenticator,
-        LoginAuthentificatorAuthenticator $authenticator
-    ): Response {
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, LoginAuthentificatorAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
+    {
         $user = new Users();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Récupérez et traitez les données du formulaire ici
             $plainPassword = $form->get('plainPassword')->getData();
-            if (!is_array($plainPassword) || !isset($plainPassword['first'], $plainPassword['second']) || $plainPassword['first'] !== $plainPassword['second']) {
-                $form->get('plainPassword')->addError(new FormError('Les mots de passe ne correspondent pas.'));
-            }
+            
+            // Encodez le mot de passe
+            $user->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $user,
+                    $plainPassword
+                )
+            );
 
-            if ($form->isValid()) {
-                $user->setPassword($passwordHasher->hashPassword($user, $plainPassword['first']));
+            // Enregistrez l'utilisateur en base de données
+            $entityManager->persist($user);
+            $entityManager->flush();
 
-                $entityManager->persist($user);
-                $entityManager->flush();
-
-                // Authentifier l'utilisateur
-                $userAuthenticator->authenticateUser($user, $authenticator, $request);
-
-                // Rediriger vers la page d'accueil après inscription et connexion réussies
-                return $this->redirectToRoute('app_homepage');
-            }
+            // Authentifiez l'utilisateur et redirigez-le
+            return $userAuthenticator->authenticateUser(
+                $user,
+                $authenticator,
+                $request
+            );
         }
 
+        // Si le formulaire est invalide, affichez-le à nouveau avec les erreurs
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);

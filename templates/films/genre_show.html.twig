@@ -7,9 +7,11 @@
             {% for film in films %}
                 <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
                     <div class="card h-100">
-                        {% set firstImage = film.getImages()|first %}
-                        <img src="{{ firstImage ? asset('assets/img/' ~ firstImage.getPhoto()) : asset('assets/img/default/image.jpg') }}" class="d-block w-100 film-image" alt="Image de {{ film.name }}">
-                        <div class="card-body">
+{% set firstImage = film.getImages()|first %}
+                    <a href="{{ path('app_film_detail', {'id': film.id}) }}">
+                        <img src="{{ firstImage ? asset('assets/img/' ~ firstImage.getPhoto()) : asset('assets/img/default/image.jpg') }}" alt="Image de {{ film.name }}" class="card-img-top film-image">
+                    </a>                        
+                    <div class="card-body">
                             <h5 class="card-title film-title">{{ film.name }}</h5>
                             <p class="card-genre">
                                 {% for genre in film.genres %}
@@ -17,12 +19,6 @@
                                 {% endfor %}
                             </p>
                             <p class="film-description">{{ film.description|striptags|slice(0, 200) ~ '...' }}</p>
-                            {% if app.user %}
-                                {% set isFavorite = film.favories|filter(favori => favori.getUsers == app.user)|length > 0 %}
-                                <a href="{{ path('film_add_to_favorites', {'id': film.id}) }}" class="btn btn-{{ isFavorite ? 'secondary' : 'primary' }}">
-                                    {{ isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris' }}
-                                </a>
-                            {% endif %}
                         </div>
                         <div class="card-footer">
                             <a href="{{ path('app_film_detail', {'id': film.id}) }}" class="btn btn-primary">Voir plus</a>

@@ -23,17 +23,13 @@
                 <div class="col-md-4">
                     <div class="card mb-4">
                         {% set firstImage = film.getImages()|first %}
-                        <img src="{{ firstImage ? asset('assets/img/' ~ firstImage.getPhoto()) : asset('assets/img/default/image.jpg') }}" class="d-block w-100 film-image" alt="Affiche de {{ film.name }}">
+                    <a href="{{ path('app_film_detail', {'id': film.id}) }}">
+                        <img src="{{ firstImage ? asset('assets/img/' ~ firstImage.getPhoto()) : asset('assets/img/default/image.jpg') }}" alt="Image de {{ film.name }}" class="card-img-top film-image">
+                    </a>
                         <div class="card-body">
                             <h5 class="card-title film-title">{{ film.name }}</h5>
                             <p class="film-rating">Note : {{ film.averageRating }}/5</p>
                             <p class="card-text film-description">{{ film.getDescription()|striptags|slice(0, 200) ~ '...' }}</p>
-                            {% if app.user %}
-                                {% set isFavorite = film.favories|filter(favori => favori.getUsers == app.user)|length > 0 %}
-                                <a href="{{ path('film_add_to_favorites', {'id': film.id}) }}" class="btn btn-{{ isFavorite ? 'secondary' : 'primary' }}">
-                                    {{ isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris' }}
-                                </a>
-                            {% endif %}
                         </div>
                         <div class="card-footer">
                             <a href="{{ path('app_film_detail', {'id': film.id}) }}" class="btn btn-primary">Voir plus</a>

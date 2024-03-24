@@ -7,6 +7,8 @@
 /* Styling pour le titre du film */
 .film-title {
     color: white;
+    font-weight: bold; /* Mettre le texte en gras */
+
 }
 
 /* Styling pour le résumé du film */
@@ -39,14 +41,21 @@
     border: none;
 }
 
-/* Définir une taille fixe pour toutes les images */
+/* Ajout de l'effet de zoom et de la lueur rouge au survol de l'image */
 .film-image {
     height: 500px; /* Taille fixe de 500 pixels */
     width: auto; /* Largeur automatique pour maintenir l'aspect ratio */
     max-width: 100%; /* Limiter la largeur à 100% pour s'adapter au conteneur */
     object-fit: cover; /* Redimensionner l'image pour couvrir complètement le conteneur */
+    transition: transform 0.5s ease, box-shadow 0.5s ease; /* Ajout de la transition pour une animation fluide */
+
+    /* Effet de zoom au survol */
+    &:hover {
+        transform: scale(1.05); /* Zoom de l'image */
+    }
 }
-/* Styling pour la date de sortie */
-.release-date {
-    color: white;
+
+/* Ajout de la lueur rouge autour de l'image au survol */
+.film-image:hover {
+    box-shadow: 0 0 20px 5px #e53637; /* Lueur rouge */
 }

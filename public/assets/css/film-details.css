@@ -64,16 +64,16 @@
     }
     
 
-.film-image {
-    width: 100%;
-    height: auto;
-    max-height: 300px;
-    object-fit: contain;  /* Ajuster l'image tout en conservant son aspect */
-    display: block;  /* Pour éliminer l'espace blanc sous l'image */
-    margin: 0 auto;  /* Centrer l'image horizontalement */
-    border-radius: 10px;
-
-}
+    .film-image {
+        width: 100%; /* Utilisez 100% pour occuper toute la largeur de son conteneur */
+        height: auto; /* Conserve les proportions de l'image */
+        max-height: 500px; /* Ajustez cette valeur en fonction de vos besoins */
+        object-fit: contain; /* Garantit que l'image s'ajuste tout en gardant ses proportions */
+        display: block;
+        margin: 0 auto; /* Centre l'image horizontalement */
+        border-radius: 10px; /* Pour les coins arrondis, si souhaité */
+    }
+    
 .like-section {
     margin-top: 15px;
 }
@@ -91,4 +91,32 @@
     max-height: 100%;
     box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.5);
     cursor: zoom-out;  /* Pour indiquer que cliquer dessus ramènera l'image à sa taille normale */
+}
+@keyframes colorCycle {
+    0% { background-color: #1b1b1b; }
+    25% { background-color: #e53637; }
+    50% { background-color: #1b1e1b; }
+    75% { background-color: #e53637; }
+    100% { background-color: #1b1b1b; }
+}
+
+body {
+    animation: colorCycle 30s infinite;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.comments-list, .film-comments {
+    opacity: 0;
+    animation: fadeIn 1s ease forwards;
+    animation-delay: 0.5s;
 }

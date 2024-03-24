@@ -10,6 +10,7 @@ use App\Form\UserProfileType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Form\FormError;
 
 class ProfileController extends AbstractController
 {
@@ -25,23 +26,20 @@ class ProfileController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Supposez que vous avez un champ dans votre formulaire pour le mot de passe actuel nommé 'currentPassword'
-            $currentPassword = $form->get('currentPassword')->getData(); // Vous devrez ajouter ce champ à votre formulaire UserProfileType
-
-            if (!$passwordHasher->isPasswordValid($user, $currentPassword)) {
-                $this->addFlash('error', 'Le mot de passe actuel est incorrect.');
-                return $this->render('profile/index.html.twig', [
-                    'form' => $form->createView(),
-                ]);
+            // Vérifiez d'abord si le formulaire est valide avant de vérifier le mot de passe
+            $password = $form->get('password')->getData();
+            if ($password && !$passwordHasher->isPasswordValid($user, $password)) {
+                $form->get('password')->addError(new FormError('Le mot de passe est incorrect.'));
+            } else {
+                // La logique de mise à jour du profil ici
+                $entityManager->persist($user);
+                $entityManager->flush();
+                
+                $this->addFlash('success', 'Votre profil a été mis à jour avec succès.');
+                return $this->redirectToRoute('app_profile');
             }
-
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Votre profil a été mis à jour avec succès.');
-            return $this->redirectToRoute('app_profile');
         }
-
+        
         return $this->render('profile/index.html.twig', [
             'form' => $form->createView(),
         ]);

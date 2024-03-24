@@ -122,15 +122,21 @@ class FilmsController extends AbstractController
     #[Route('/recherche/films', name: 'recherche_film')]
     public function search(Request $request, FilmsRepository $filmsRepository, GenreRepository $genreRepository): Response
     {
-        $searchTerm = $request->query->get('recherche');
-        $films = $filmsRepository->findBy(['name' => $searchTerm]);
+        // Récupérer le terme de recherche de la requête
+        $searchTerm = $request->query->get('recherche', '');
+    
+        // Utiliser findByPartialName pour trouver les films par terme de recherche partiel
+        $films = $filmsRepository->findByPartialName($searchTerm);
+    
+        // Récupérer tous les genres pour les afficher dans un filtre, par exemple
         $genres = $genreRepository->findAll();
-
+    
         return $this->render('films/recherche_film.html.twig', [
             'films' => $films,
             'genres' => $genres,
         ]);
     }
+    
 
     #[Route('/genre/{id}', name: 'genre_show')]
     public function showByGenre(int $id, GenreRepository $genreRepository, FilmsRepository $filmsRepository): Response

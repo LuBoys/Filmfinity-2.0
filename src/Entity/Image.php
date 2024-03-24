@@ -19,7 +19,7 @@ class Image
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $photo = null;
 
-    #[ORM\ManyToOne(inversedBy: 'images')]
+    #[ORM\ManyToOne(inversedBy: 'images', cascade: ["remove"])]
     private ?Films $imagefilm = null;
     
     #[ORM\Column(type: "string", length: 255, nullable: true)]
@@ -65,13 +65,15 @@ class Image
 
         return $this;
     }
+
     public function __toString(): string
     {
         return $this->titre ?: ''; // retourne le titre si défini, sinon une chaîne vide
     }
+
     public function getPath(): ?string
     {
         return $this->path;
     }
-    
+
 }

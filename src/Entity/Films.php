@@ -21,9 +21,6 @@ class Films
 
     #[ORM\Column(type: "text", nullable: true)]
     private ?string $description = null;
-    
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $duree = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $moderation = null;
@@ -43,10 +40,10 @@ class Films
     #[ORM\OneToMany(mappedBy: 'films', targetEntity: Notes::class)]
     private Collection $notes;
 
-    #[ORM\OneToMany(mappedBy: 'films', targetEntity: Commentaire::class)]
+    #[ORM\OneToMany(mappedBy: 'films', targetEntity: Commentaire::class, cascade: ['remove'])]
     private Collection $commentaires;
 
-    #[ORM\OneToMany(mappedBy: 'films', targetEntity: Favorie::class)]
+    #[ORM\OneToMany(mappedBy: 'films', targetEntity: Favorie::class, cascade: ['remove'])]
     private Collection $favories;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
@@ -55,7 +52,7 @@ class Films
     #[ORM\ManyToMany(targetEntity: LikesFilms::class, inversedBy: 'films')]
     private Collection $likes_films;
 
-    #[ORM\OneToMany(mappedBy: 'imagefilm', targetEntity: Image::class)]
+    #[ORM\OneToMany(mappedBy: 'imagefilm', targetEntity: Image::class, cascade: ['remove'])]
     private Collection $images;
     
 
@@ -105,18 +102,6 @@ class Films
     public function setDescription(?string $description): static
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getDuree(): ?string
-    {
-        return $this->duree;
-    }
-
-    public function setDuree(?string $duree): static
-    {
-        $this->duree = $duree;
 
         return $this;
     }
@@ -385,7 +370,7 @@ public function addImage(Image $image): static
 {
     if (!$this->images->contains($image)) {
         $this->images->add($image);
-        $image->setImagefilm($this); // Changed from setFilms
+        $image->setImagefilm($this);
     }
 
     return $this;
@@ -394,14 +379,14 @@ public function addImage(Image $image): static
 public function removeImage(Image $image): static
 {
     if ($this->images->removeElement($image)) {
-        // set the owning side to null (unless already changed)
-        if ($image->getImagefilm() === $this) { // Changed from getFilms
-            $image->setImagefilm(null); // Changed from setFilms
+        if ($image->getImagefilm() === $this) {
+            $image->setImagefilm(null);
         }
     }
 
     return $this;
 }
+
 public function getFirstImagePath(): ?string
 {
     if ($this->images->isEmpty()) {

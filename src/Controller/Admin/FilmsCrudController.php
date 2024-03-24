@@ -24,7 +24,6 @@ class FilmsCrudController extends AbstractCrudController
     {
         return [
             TextField::new('name'),
-            IntegerField::new('duree')->setLabel('Durée (en minutes)'),
             DateField::new('date_sortie')->setLabel('Date de sortie'),
             TextEditorField::new('description'),
             AssociationField::new('genres')
