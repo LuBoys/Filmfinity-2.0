@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% block stylesheets %}
 <html>
 	<head>
 		<meta charset="utf-8">
@@ -15,7 +16,8 @@
 		<link rel="stylesheet" href="{{ asset('assets/css/login.css') }}">
 		<link rel="stylesheet" href="{{ asset('assets/css/register.css') }}">
 		<link rel="stylesheet" href="{{ asset('assets/css/edit_commentaire.css') }}">
-		<link rel="stylesheet" href="{{ asset('assets/css/films.css') }}"> {% block stylesheets %}{% endblock %}
+		<link rel="stylesheet" href="{{ asset('assets/css/films.css') }}"> 
+		{% endblock %}
 		</head>
 		<body>
 

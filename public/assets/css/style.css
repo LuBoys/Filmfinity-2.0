@@ -436,6 +436,21 @@ ol {
 /*---------------------
   Product
 -----------------------*/
+@keyframes slideFromBottom {
+    0% {
+        transform: translateY(100px); /* Commence un peu plus bas */
+        opacity: 0; /* Commence invisible */
+    }
+    100% {
+        transform: translateY(0); /* Finit à sa position normale */
+        opacity: 1; /* Finit complètement visible */
+    }
+}
+
+.animate-from-bottom {
+    animation: slideFromBottom 0.5s ease-out forwards;
+}
+
 
 .product {
 	padding-bottom: 60px;
