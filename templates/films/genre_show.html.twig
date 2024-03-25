@@ -6,7 +6,7 @@
         <div class="row">
             {% for film in films %}
                 <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
-                    <div class="card h-100">
+                    <div class="card h-100 slide-up">
 {% set firstImage = film.getImages()|first %}
                     <a href="{{ path('app_film_detail', {'id': film.id}) }}">
                         <img src="{{ firstImage ? asset('assets/img/' ~ firstImage.getPhoto()) : asset('assets/img/default/image.jpg') }}" alt="Image de {{ film.name }}" class="card-img-top film-image">

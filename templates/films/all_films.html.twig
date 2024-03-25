@@ -1,4 +1,9 @@
 {% extends 'base.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('chemin/vers/le/fichier/films.css') }}" rel="stylesheet">
+{% endblock %}
+
 
 {% block title %}Tous les Films{% endblock %}
 
@@ -21,7 +26,7 @@
     <div class="row justify-content-center">
         {% for film in films %}
             <div class="col-md-4 mb-4">
-                <div class="card h-100 shadow">
+<div class="card h-100 shadow slide-up">
                     {% set firstImage = film.getImages()|first %}
                     <a href="{{ path('app_film_detail', {'id': film.id}) }}">
                         <img src="{{ firstImage ? asset('assets/img/' ~ firstImage.getPhoto()) : asset('assets/img/default/image.jpg') }}" alt="Image de {{ film.name }}" class="card-img-top film-image">
