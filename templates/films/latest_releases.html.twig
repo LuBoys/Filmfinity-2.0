@@ -14,7 +14,6 @@
 						<label for="order" class="form-label"></label>
 						<select id="order" name="order" class="form-select" onchange="this.form.submit()">
 							<option value="alphabetical" {% if current_order == 'alphabetical' %} selected {% endif %}>Ordre Alphabétique</option>
-							<option value="duration" {% if current_order == 'duration' %} selected {% endif %}>Durée</option>
 							<option value="latest" {% if current_order == 'latest' %} selected {% endif %}>Dernière Sortie</option>
 						</select>
 					</div>
