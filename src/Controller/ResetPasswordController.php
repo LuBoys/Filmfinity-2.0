@@ -174,4 +174,5 @@ class ResetPasswordController extends AbstractController
         $this->setTokenObjectInSession($resetToken);
         return $this->redirectToRoute('app_check_email');
     }
+    
 }

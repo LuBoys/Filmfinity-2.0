@@ -12,7 +12,6 @@
                     <select id="order" name="order" class="form-select" onchange="this.form.submit()">
                         <option value="popular" {% if current_order == 'popular' %}selected{% endif %}>Plus Populaires</option>
                         <option value="alphabetical" {% if current_order == 'alphabetical' %}selected{% endif %}>Ordre Alphabétique</option>
-                        <option value="duration" {% if current_order == 'duration' %}selected{% endif %}>Durée la plus longue</option>
                     </select>
                 </div>
             </div>

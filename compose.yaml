@@ -31,6 +31,18 @@ services:
     volumes:
       - database_data2:/var/lib/postgresql/data2:rw
 
+  pgadmin:
+      image: dpage/pgadmin4
+      container_name: pgadmin4_container
+      restart: always
+      ports:
+        - "8888:80"
+      environment:
+        PGADMIN_DEFAULT_EMAIL: user-name@domain-name.com
+        PGADMIN_DEFAULT_PASSWORD: strong-password
+      volumes:
+        - pgadmin-data:/var/lib/pgadmin
+
   mailpit:
     image: axllent/mailpit
     container_name: mailpit
@@ -46,7 +58,10 @@ services:
       MP_SMTP_AUTH_ACCEPT_ANY: 1
       MP_SMTP_AUTH_ALLOW_INSECURE: 1
 
+
 volumes:
   caddy_data:
   caddy_config:
   database_data2:
+  pgadmin-data:
+
