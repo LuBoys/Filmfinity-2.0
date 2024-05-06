@@ -17,6 +17,7 @@ services:
     volumes:
       - caddy_data:/data
       - caddy_config:/config
+      - /Users/lucas/Documents/filmfinity/frankenphp/Caddyfile:/etc/caddy/Caddyfile
     ports:
       - target: 80
         published: ${HTTP_PORT:-80}
