@@ -30,13 +30,16 @@ class FilmsRepository extends ServiceEntityRepository
     public function findPopularFilms()
     {
         return $this->createQueryBuilder('f')
-            ->leftJoin('f.commentaires', 'c') // Assurez-vous que la relation entre Films et Commentaires est correctement définie
+            ->leftJoin('f.commentaires', 'c')
+            ->addSelect('COALESCE(AVG(c.rating), 0) AS HIDDEN avgRating') // Treat NULL as 0
             ->groupBy('f.id')
-            ->orderBy('AVG(c.rating)', 'ASC') // Utilisez c.rating qui fait référence au champ rating dans l'entité Commentaire
+            ->orderBy('avgRating', 'DESC') // Sort by avgRating descending
             ->setMaxResults(10)
             ->getQuery()
             ->getResult();
     }
+    
+    
 
     public function findLatestReleases()
     {
