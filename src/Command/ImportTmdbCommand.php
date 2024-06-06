@@ -37,7 +37,6 @@ class ImportTmdbCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        
         $output->writeln([
             'Importation de films',
             '=====================',
@@ -51,33 +50,25 @@ class ImportTmdbCommand extends Command
             $genreMap[$genre['id']] = $genre['name'];
         }
 
+        // Ajouter les genres à la base de données en utilisant genreMap
+        foreach ($genreMap as $id => $name) {
+            $existingGenre = $this->entityManager->getRepository(Genre::class)->find($id);
+            if (!$existingGenre) {
+                $genre = new Genre();
+                $genre->setName($name);
+                $this->entityManager->persist($genre);
+                $this->entityManager->flush();  // Flusher ici pour s'assurer que l'ID est généré
+                // Manuellement définir l'ID en base de données
+                $connection = $this->entityManager->getConnection();
+                $connection->executeStatement('UPDATE genre SET id = ? WHERE name = ?', [$id, $name]);
+            }
+        }
+
         $response = $this->client->request('GET', "https://api.themoviedb.org/3/movie/popular?api_key={$this->apiKey}&language=fr-FR");
         $films = json_decode($response->getBody(), true)['results'];
 
         $progressBar = new ProgressBar($output, count($films));
         $progressBar->start();
-
-        $genreMap = [
-            28 => 'Action',
-            12 => 'Adventure',
-            16 => 'Animation',
-            35 => 'Comedy',
-            80 => 'Crime',
-            99 => 'Documentary',
-            18 => 'Drama',
-            10751 => 'Family',
-            14 => 'Fantasy',
-            36 => 'History',
-            27 => 'Horror',
-            10402 => 'Music',
-            9648 => 'Mystery',
-            10749 => 'Romance',
-            878 => 'Science Fiction',
-            10770 => 'TV Movie',
-            53 => 'Thriller',
-            10752 => 'War',
-            37 => 'Western',
-        ];
 
         foreach ($films as $filmData) {
             $film = new Films();
@@ -88,47 +79,36 @@ class ImportTmdbCommand extends Command
             if (!empty($filmData['genre_ids'])) {
                 foreach ($filmData['genre_ids'] as $genreId) {
                     if (isset($genreMap[$genreId])) {
-                        $genre = new Genre();
-                        $genre->setName($genreMap[$genreId]);
-                        $this->entityManager->persist($genre);
-                        $film->addGenre($genre);
+                        // Associer le genre existant en base de données
+                        $genre = $this->entityManager->getRepository(Genre::class)->find($genreId);
+                        if ($genre) {
+                            $film->addGenre($genre);
+                        }
                     }
                 }
             }
 
-           // ... (code précédent)
+            if (!empty($filmData['poster_path'])) {
+                $imageUrl = 'https://image.tmdb.org/t/p/w500' . $filmData['poster_path'];
+                try {
+                    $response = $this->client->request('GET', $imageUrl, ['timeout' => 120]);
+                    $imageContents = $response->getBody()->getContents();
 
-// ... (code précédent)
+                    $filename = basename($filmData['poster_path']);
+                    $localPath = __DIR__ . '/../../public/assets/img/' . $filename;
+                    file_put_contents($localPath, $imageContents);
 
-if (!empty($filmData['poster_path'])) {
-    $imageUrl = 'https://image.tmdb.org/t/p/w500' . $filmData['poster_path'];
-    try {
-        $response = $this->client->request('GET', $imageUrl, ['timeout' => 120]);
-        $imageContents = $response->getBody()->getContents();
+                    $image = new Image();
+                    $titreImage = "Poster : " . $filmData['title'];
+                    $image->setTitre($titreImage);
+                    $image->setPhoto($filename);
+                    $this->entityManager->persist($image);
 
-        $filename = basename($filmData['poster_path']);
-        $localPath = __DIR__ . '/../../public/assets/img/' . $filename;
-        file_put_contents($localPath, $imageContents);
-        
-        $image = new Image();
-        $titreImage = "Poster : " . $filmData['title']; // Créez un titre pour l'image
-        $image->setTitre($titreImage); // Définissez le titre de l'image
-        $image->setPhoto($filename); // Enregistre le nom de fichier uniquement.
-        $this->entityManager->persist($image);
-        
-        $film->addImage($image);
-    } catch (\GuzzleHttp\Exception\GuzzleException $e) {
-        $output->writeln('Erreur lors du téléchargement de l\'image : ' . $e->getMessage());
-    }
-}
-
-// ... (code suivant)
-
-
-// ... (code suivant)
-
-            
-
+                    $film->addImage($image);
+                } catch (\GuzzleHttp\Exception\GuzzleException $e) {
+                    $output->writeln('Erreur lors du téléchargement de l\'image : ' . $e->getMessage());
+                }
+            }
 
             // Gestion des acteurs, réalisateurs et producteurs
             $creditsResponse = $this->client->request('GET', "https://api.themoviedb.org/3/movie/{$filmData['id']}/credits?api_key={$this->apiKey}");
@@ -166,4 +146,3 @@ if (!empty($filmData['poster_path'])) {
         return Command::SUCCESS;
     }
 }
-

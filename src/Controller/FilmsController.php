@@ -48,6 +48,8 @@ class FilmsController extends AbstractController
         }
     
         $commentaires = $film->getCommentaires();
+        $nombreCommentaires = count($commentaires);
+        
         $totalNotes = 0;
         foreach ($commentaires as $comment) {
             $totalNotes += $comment->getRating();
@@ -70,7 +72,6 @@ class FilmsController extends AbstractController
         if (!$userHasCommented) {
             $commentaire->setFilms($film);
             $commentaire->setUsers($this->getUser());
-            // Ajouter la date automatiquement
             $commentaire->setDateCommentaire(new \DateTime());
             $form = $this->createForm(CommentaireType::class, $commentaire);
             $form->handleRequest($request);
@@ -89,12 +90,14 @@ class FilmsController extends AbstractController
             'film' => $film,
             'form' => $userHasCommented ? null : $form->createView(),
             'commentaires' => $commentaires,
+            'nombre_commentaires' => $nombreCommentaires,
             'moyenne_notes' => $moyenneNotes,
             'userHasCommented' => $userHasCommented,
             'existingComment' => $existingComment,
             'genres' => $genres,
         ]);
     }
+    
     
 
     #[Route('/edit-comment/{id}', name: 'app_edit_comment', methods: ['GET', 'POST'])]

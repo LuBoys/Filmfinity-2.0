@@ -12,7 +12,6 @@
 </style>
 {% endblock %}
 
-
 <header class="header">
     <div class="container">
         <div class="row align-items-center justify-content-between">
@@ -40,8 +39,10 @@
                         <li><a href="{{ path('latest_releases') }}">Dernière sortie</a></li>
                         {% if is_granted('ROLE_ADMIN') %}
                             <li><a href="{{ path('admin') }}">CRUD</a></li>
+                            <!-- Lien vers la page des suggestions pour les administrateurs -->
+                            <li><a href="{{ path('admin_suggestions') }}">Suggestions</a></li>
                         {% endif %}
-         </ul>
+                    </ul>
                 </nav>
             </div>
             <div class="col-lg-3 text-right">

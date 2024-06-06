@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Suggestions de films{% endblock %}
+
+{% block body %}
+    <h1>Suggestions de films</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Titre</th>
+                <th>Message</th>
+                <th>Nom du suggesteur</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for suggestion in suggestions %}
+                <tr>
+                    <td>{{ suggestion.id }}</td>
+                    <td>{{ suggestion.title }}</td>
+                    <td>{{ suggestion.message }}</td>
+                    <td>{{ suggestion.suggesterName }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

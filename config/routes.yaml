@@ -1,10 +1,20 @@
 controllers:
-    resource:
+    resource: 
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
-# config/routes.yaml
+
+# Route pour la demande de réinitialisation de mot de passe
 password_reset_request:
     path: /reset-password
     controller: App\Controller\ResetPasswordController::requestResetPassword
 
+# Route pour la soumission de suggestions de films
+suggestion:
+    path: /suggestion
+    controller: App\Controller\SuggestionController::suggest
+
+# Route pour l'affichage des suggestions de films pour l'administrateur
+admin_suggestions:
+    path: /admin/suggestions
+    controller: App\Controller\Admin\AdminController::suggestions

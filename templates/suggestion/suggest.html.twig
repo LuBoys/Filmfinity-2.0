@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Suggérer un film{% endblock %}
+
+{% block body %}
+    <h1>Suggérer un film</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {{ form_start(form) }}
+        {{ form_row(form.title) }}
+        {{ form_row(form.message) }}
+        {{ form_row(form.suggesterName) }}
+        <button type="submit" class="btn btn-primary">Soumettre</button>
+    {{ form_end(form) }}
+{% endblock %}

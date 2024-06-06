@@ -71,9 +71,10 @@ class FilmsRepository extends ServiceEntityRepository
     public function findByPartialName(string $searchTerm): array
     {
         return $this->createQueryBuilder('f')
-            ->where('f.name LIKE :searchTerm')
+            ->where('LOWER(f.name) LIKE LOWER(:searchTerm)')
             ->setParameter('searchTerm', '%' . $searchTerm . '%')
             ->getQuery()
             ->getResult();
     }
+    
 }
